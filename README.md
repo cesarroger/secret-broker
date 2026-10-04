@@ -2,13 +2,47 @@
 
 A Claude Code mod. Claude writes `{{secret:NAME}}` in a terminal command instead of a key, token or password. The log pops up, you enter the value privately and approve the exact command, the value is injected as `$NAME` for that one command only, and every output is redacted. Claude never sees the value.
 
-## Run it
+## Install
+
+Clone it anywhere, then point Claude Code at the folder.
 
 ```
-claude --plugin-dir "D:\APP DEVELOPMENT\Claude Mods\SECRET-BROKER"
+git clone https://github.com/cesarroger/secret-broker.git
 ```
 
-Then ask Claude for something that needs a credential, e.g. "log in to the GitHub CLI with my token". The pane titled **Secret needed** opens in the Claude Code view.
+### Always on (Claude desktop app's Code tab, and the terminal)
+
+Add an `env` block to your user settings, `~/.claude/settings.json` (Windows: `C:\Users\<you>\.claude\settings.json`), using the folder's absolute path:
+
+```json
+{
+  "env": {
+    "CLAUDE_CODE_PLUGIN_DIRS": "/Users/you/mods/secret-broker",
+    "CLAUDE_CODE_ENABLE_FUNCTION_HOOKS": "1",
+    "CLAUDE_CODE_PLUGIN_DIR_WATCH": "1"
+  }
+}
+```
+
+- `CLAUDE_CODE_PLUGIN_DIRS` loads the mod in every session. On Windows, escape backslashes: `"D:\\Mods\\secret-broker"`. Several mods: separate the paths with `:` (macOS/Linux) or `;` (Windows).
+- `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS` turns mods on where Claude Code runs in the background, as the desktop app does; without it the mod may not load there.
+- `CLAUDE_CODE_PLUGIN_DIR_WATCH` reloads the mod when its files change (optional).
+
+Settings are read when a session starts: open a **new** session (quit and reopen the app if needed). To turn the mod off, remove those lines.
+
+### One session only (terminal)
+
+```
+claude --plugin-dir "/path/to/secret-broker"
+```
+
+### Check that it loaded
+
+In a new session, send `/secrets` (press Enter; the slash menu may not list it while you type). It should reply `secret-broker: nothing remembered this session.`
+
+Then try a dummy secret: ask Claude *Use the secret broker to run: printf 'the value is %s\n' "{{secret:TEST_KEY}}"*, enter any value in the pane, and approve. The output should read `the value is [redacted:TEST_KEY]`.
+
+For real use, ask for something that needs a credential, e.g. "log in to the GitHub CLI with my token". The pane titled **Secret needed** opens in the Claude Code view.
 
 ## In the pane
 

@@ -57,10 +57,11 @@ test('on Windows, stages through the engine without sh and runs in Git Bash path
   const ran = await call
 
   expect(ran.deny).toBeUndefined()
-  // Written by the engine to the profile folder, forward slashes, never via sh.
+  // Written by the engine to the profile folder, never via sh. The engine hands
+  // hooks the native spelling, so compare with slashes normalized.
   expect(writes.length).toBe(1)
   expect(writes[0]!.text).toBe(SECRET)
-  expect(writes[0]!.path.startsWith('C:/Users/tester/.claude/secret-broker/tmp/')).toBe(true)
+  expect(writes[0]!.path.replaceAll('\\', '/').startsWith('C:/Users/tester/.claude/secret-broker/tmp/')).toBe(true)
   expect(argvs.some(a => a[0] === 'sh' || a[0] === '/bin/sh')).toBe(false)
   expect(JSON.stringify(argvs)).not.toContain(SECRET)
 
