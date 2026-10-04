@@ -1,0 +1,9 @@
+# Local CodeGraph maintenance
+.codegraph/
+codegraph.json
+
+# Local tooling and secrets
+node_modules/
+.claude/
+.env
+.env.*

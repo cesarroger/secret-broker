@@ -1,0 +1,6 @@
+{
+  "name": "secret-broker",
+  "version": "0.2.0",
+  "description": "Pops up when Claude needs an API key or token for a terminal command and injects it without Claude ever seeing it",
+  "types": "./types/index.d.ts"
+}

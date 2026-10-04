@@ -1,0 +1,4 @@
+
+# Local shared CodeGraph maintenance
+.codegraph/
+/codegraph.json
