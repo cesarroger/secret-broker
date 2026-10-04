@@ -18,15 +18,14 @@ Add an `env` block to your user settings, `~/.claude/settings.json` (Windows: `C
 {
   "env": {
     "CLAUDE_CODE_PLUGIN_DIRS": "/Users/you/mods/secret-broker",
-    "CLAUDE_CODE_ENABLE_FUNCTION_HOOKS": "1",
-    "CLAUDE_CODE_PLUGIN_DIR_WATCH": "1"
+    "CLAUDE_CODE_ENABLE_FUNCTION_HOOKS": "1"
   }
 }
 ```
 
 - `CLAUDE_CODE_PLUGIN_DIRS` loads the mod in every session. On Windows, escape backslashes: `"D:\\Mods\\secret-broker"`. Several mods: separate the paths with `:` (macOS/Linux) or `;` (Windows).
 - `CLAUDE_CODE_ENABLE_FUNCTION_HOOKS` turns mods on where Claude Code runs in the background, as the desktop app does; without it the mod may not load there.
-- `CLAUDE_CODE_PLUGIN_DIR_WATCH` reloads the mod when its files change (optional).
+- Don't set `CLAUDE_CODE_PLUGIN_DIR_WATCH` for everyday use. It reloads the mod whenever anything in its folder changes (an indexer, a sync client, `git`), and a reload wipes the mod's memory, including a pending approval and remembered secrets. Use it only while editing the mod.
 
 Settings are read when a session starts: open a **new** session (quit and reopen the app if needed). To turn the mod off, remove those lines.
 

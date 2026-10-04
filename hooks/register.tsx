@@ -394,8 +394,17 @@ function logLine(seed: string): string {
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await loadMascot($)
-    // A reload drops the pane's waiter; don't leave a pane nobody can answer.
-    if (pending === null) await update($, request, () => null)
+    // A reload drops the pane's waiter and every value in module memory; don't
+    // leave a pane nobody can answer, and say so rather than fail silently.
+    if (pending === null && (await read($, request)) !== null) {
+      await update($, request, () => null)
+      try {
+        await $.ui.close({ id: PANE })
+      } catch {
+        // not open
+      }
+      $.ui.toast('secret-broker reloaded and dropped the pending secret request; ask Claude to run the command again')
+    }
     await sweep($)
     await $.command.register({
       name: 'secrets',
